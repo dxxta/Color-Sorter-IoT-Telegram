@@ -1,0 +1,63 @@
+services:
+  broker:
+    image: eclipse-mosquitto:latest
+    restart: always
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    networks:
+      - iot
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1sampai8
+      - POSTGRES_DB=sandbox
+      - POSTGRES_HOST_AUTH_METHOD=md5
+      - POSTGRES_INITDB_ARGS=--auth=md5
+    networks:
+      - iot
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+      - ./initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "6543:5432"
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    networks:
+      - iot
+    environment:
+      - DB_USER=admin
+      - DB_PASSWORD=1sampai8
+      - DB_HOST=database
+      - DB_PORT=5432
+    ports:
+      - "5432:5432"
+  api:
+    build: ./backend
+    restart: always
+    networks:
+      - iot
+    ports:
+      - 8080:8080
+    env_file: "./backend/.env"
+    environment:
+      - DB_URL=postgresql://admin:1sampai8@database:5432/sandbox
+      - DIRECT_URL=postgresql://admin:1sampai8@database:6543/sandbox
+      - BROKER_URL=mqtt://broker:1883
+      - COLORS=yellow,green,blue,red,orange,pink
+      - PORT=8080
+      - NODE_ENV=production
+  client:
+    build: ./frontend
+    restart: always
+    networks:
+      - iot
+    ports:
+      - 3030:3030
+volumes:
+  pgdata:
+networks:
+  iot:

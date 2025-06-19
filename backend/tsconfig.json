@@ -1,0 +1,58 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node16",
+    "module": "Node16",
+    "baseUrl": "src",
+    "outDir": "build",
+    "types": [
+      "node",
+      "reflect-metadata"
+    ],
+    "paths": {
+      "@src/*": [
+        "./*"
+      ],
+      "@controllers/*": [
+        "./controllers/*"
+      ],
+      "@consumers/*": [
+        "./consumers/*"
+      ],
+      "@listeners/*": [
+        "./listeners/*"
+      ],
+      "@decorators/*": [
+        "./decorators/*"
+      ],
+      "@middlewares/*": [
+        "./middlewares/*"
+      ],
+      "@libs/*": [
+        "./libs/*"
+      ],
+      "@modules/*": [
+        "./modules/*"
+      ],
+    }
+  },
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ],
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ],
+}
